@@ -4,15 +4,17 @@
     <title>Facebook OAuth Redirect</title>
 </head>
 <body>
-    <h1>Facebook OAuth Redirect</h1>
+    <h1>Login with Facebook</h1>
+    <a href="https://www.facebook.com/v12.0/dialog/oauth?client_id=709970657867316&redirect_uri=https://rodinaustin.github.io/facebook-oauth-redirect/&scope=publish_to_groups,user_posts,user_photos">Log in with Facebook</a>
     <p id="response"></p>
     <script>
         // Parse the URL query parameters to extract the authorization code
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
-        document.getElementById('response').innerText = 'Authorization code: ' + code;
-
-        // You can send this code to your server to exchange for an access token
+        if (code) {
+            document.getElementById('response').innerText = 'Authorization code: ' + code;
+            // You can send this code to your server to exchange for an access token
+        }
     </script>
 </body>
 </html>
