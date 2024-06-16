@@ -5,17 +5,52 @@
 </head>
 <body>
     <h1>Login with Facebook</h1>
-    <a href="https://www.facebook.com/v20.0/dialog/oauth?client_id=709970657867316&redirect_uri=https://rodinaustin.github.io/facebook-oauth-redirect/&scope=user_posts,user_photos">Log in with Facebook</a>
-    <p id="response"></p>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script>
-        // Parse the URL query parameters to extract the authorization code
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        if (code) {
-            document.getElementById('response').innerText = 'Authorization code: ' + code;
-            // You can send this code to your server to exchange for an access token
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '709970657867316',
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v20.0'
+            });
+            FB.AppEvents.logPageView();   
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <fb:login-button 
+        scope="user_posts,user_photos,pages_manage_posts" 
+        onlogin="checkLoginState();">
+    </fb:login-button>
+
+    <div id="status"></div>
+
+    <script>
+        function checkLoginState() {
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        }
+
+        function statusChangeCallback(response) {
+            if (response.status === 'connected') {
+                var accessToken = response.authResponse.accessToken;
+                document.getElementById('status').innerHTML = 'Logged in. Access Token: ' + accessToken;
+                // Log the access token to the console for easy copying
+                console.log('Access Token:', accessToken);
+            } else {
+                document.getElementById('status').innerHTML = 'Please log into this app.';
+            }
         }
     </script>
 </body>
 </html>
-
